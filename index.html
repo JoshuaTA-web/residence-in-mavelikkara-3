@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Before After Slider</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Avenir', sans-serif;
+      background: transparent;
+    }
+
+    .slider-wrapper {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      aspect-ratio: 4 / 3;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slider-wrapper img {
+      position: absolute;
+      height: 100%;
+      width: auto;
+      object-fit: contain;
+      top: 0;
+      left: 0;
+    }
+
+    .after-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 50%;
+      overflow: hidden;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .slider {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 4px;
+      height: 100%;
+      background: white;
+      z-index: 3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .slider-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 28px;
+      font-weight: bold;
+      color: white;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 6px 10px;
+      border-radius: 6px;
+      user-select: none;
+      font-family: Avenir, sans-serif;
+    }
+
+    .label {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      padding: 6px 14px;
+      font-weight: bold;
+      font-size: 18px;
+      color: white;
+      background: rgba(0, 0, 0, 0.5);
+      font-family: Avenir, sans-serif;
+      z-index: 4;
+    }
+  </style>
+</head>
+<body>
+  <div class="slider-wrapper" id="slider-container">
+    <img src="before.jpg" alt="Before">
+    <div class="after-wrapper" id="after-wrapper">
+      <img src="after.jpg" alt="After" id="after-image">
+    </div>
+    <div class="slider" id="slider">
+      <div class="slider-arrow" id="slider-arrow">▶</div>
+    </div>
+    <div class="label" id="label">Before</div>
+  </div>
+
+  <script>
+    const slider = document.getElementById("slider");
+    const afterWrapper = document.getElementById("after-wrapper");
+    const container = document.getElementById("slider-container");
+    const label = document.getElementById("label");
+    const arrow = document.getElementById("slider-arrow");
+
+    container.addEventListener("mousemove", (e) => {
+      const rect = container.getBoundingClientRect();
+      let posX = e.clientX - rect.left;
+      posX = Math.max(0, Math.min(posX, rect.width));
+      let percent = posX / rect.width;
+
+      slider.style.left = `${posX}px`;
+      afterWrapper.style.width = `${posX}px`;
+
+      if (percent < 0.5) {
+        label.textContent = "Before";
+        arrow.textContent = "▶";
+      } else {
+        label.textContent = "After";
+        arrow.textContent = "◀";
+      }
+    });
+
+    window.addEventListener("load", () => {
+      const initX = container.getBoundingClientRect().width / 2;
+      slider.style.left = `${initX}px`;
+      afterWrapper.style.width = `${initX}px`;
+    });
+  </script>
+</body>
+</html>
